@@ -18,6 +18,10 @@ A stunning interactive GLSL shader canvas built with React, TypeScript, and Vite
 
 ### 🎛️ **Interactive Controls**
 - **Mouse Tracking**: Real-time cursor position affects gravity and warping
+- **Control Overlay**: Toggle-able UI panel for real-time parameter adjustment
+- **Colormap Switching**: Live selection from 44+ scientific colormaps
+- **Texture Switching**: Dynamic texture loading and swapping
+- **Effect Toggles**: Enable/disable displacement and warp effects independently
 - **Responsive Design**: Full viewport coverage with proper aspect ratio handling
 - **Live Uniform Updates**: Dynamic shader parameter modification
 
@@ -60,9 +64,13 @@ pnpm preview
 ## 🎯 Usage
 
 1. **Launch the app** - Open your browser to the development server
-2. **Move your mouse** - Watch the shader respond with gravity effects
-3. **Observe the flow** - Enjoy the organic, ever-changing patterns
-4. **Watch transitions** - Colormaps cycle automatically over time
+2. **Access controls** - Click the ⚙️ button in the top-right corner
+3. **Customize visuals**:
+   - **Select colormap**: Choose from viridis, plasma, inferno, and 40+ others
+   - **Switch texture**: Toggle between available logo textures
+   - **Enable effects**: Turn displacement and warp effects on/off
+4. **Interact with mouse** - Move cursor to create gravity wells and warping
+5. **Hide controls** - Click × to hide UI and enjoy the full visual experience
 
 ## 🛠️ Technical Architecture
 
@@ -164,6 +172,41 @@ float falloffRate = 1.0;
 1. Add your colormap GLSL file to `src/assets/colormaps/`
 2. Import it in the main shader
 3. Add it to the colormap selection logic
+4. Update the `COLOR_MAP` object in `App.tsx`
+
+### Adding New Textures
+1. Place texture files in the `public/` directory
+2. Add texture names to the `TEXTURES` array in `App.tsx`
+3. Ensure textures follow the requirements in **Important Notes** below
+
+## ⚠️ Important Notes
+
+### 🖼️ **Texture Requirements**
+When adding custom textures/logos, **CRITICAL REQUIREMENT**:
+
+- **1-pixel transparent border**: All textures MUST have a 1-pixel fully transparent border around the entire image
+- **Why**: Prevents `GL_CLAMP_TO_EDGE` from bleeding edge pixels during displacement effects
+- **Without this**: You'll see harsh lines and color bleeding at texture edges
+- **Example**: If your logo is 200x100, make the final texture 202x102 with transparent padding
+
+### 🎨 **Texture Preparation Steps**
+1. **Create your logo/image** with desired content
+2. **Add 1-pixel transparent padding** on all sides
+3. **Save as PNG** with alpha channel
+4. **Place in `public/` directory**
+5. **Add to `TEXTURES` array** in `App.tsx`
+
+### 🔧 **Shader Behavior**
+- **Bounded sampling**: Logo only appears where original UV coordinates are valid
+- **Unbounded displacement**: Displacement effects can sample outside texture bounds
+- **Exponential falloff**: Alpha fades smoothly from center (0.5, 0.5) outward
+- **Mouse interaction**: Effects activate based on distance from cursor position
+
+### 🎛️ **Control Interface**
+- **Toggle button**: Click ⚙️ in top-right to show/hide controls
+- **Real-time updates**: All changes apply immediately to the shader
+- **Responsive design**: Interface adapts to screen size
+- **Keyboard accessible**: All controls support keyboard navigation
 
 ## 🚀 Performance
 
@@ -171,6 +214,7 @@ float falloffRate = 1.0;
 - **Optimized Sampling**: Smart texture coordinate handling
 - **Efficient Noise**: Fast pseudo-random number generation
 - **Smooth Animations**: 60fps target with proper frame timing
+- **Memory Efficient**: Textures loaded once and cached by WebGL
 
 ## 🤝 Contributing
 
