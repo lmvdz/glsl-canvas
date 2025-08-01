@@ -1925,7 +1925,6 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       {
         key: "setUniforms",
         value: function setUniforms(uniforms) {
-          console.log(uniforms)
           var parsed = parseUniforms(uniforms);
           // Set each uniform
           for (var u in parsed) {
