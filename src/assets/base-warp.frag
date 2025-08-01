@@ -1,58 +1,64 @@
 precision mediump float;
 
 // Include all available colormaps
-// #include colormaps/alpha.glsl;
-// #include colormaps/autumn.glsl;
-// #include colormaps/bathymetry.glsl;
-// #include colormaps/blackbody.glsl;
-// #include colormaps/bluered.glsl;
-// #include colormaps/bone.glsl;
-// #include colormaps/cdom.glsl;
-// #include colormaps/chlorophyll.glsl;
-// #include colormaps/cool.glsl;
-// #include colormaps/copper.glsl;
-// #include colormaps/cubehelix.glsl;
-// #include colormaps/density.glsl;
-// #include colormaps/earth.glsl;
-// #include colormaps/electric.glsl;
-// #include colormaps/freesurface-blue.glsl;
-// #include colormaps/freesurface-red.glsl;
-// #include colormaps/greens.glsl;
-// #include colormaps/greys.glsl;
-// #include colormaps/hot.glsl;
-// #include colormaps/hsv.glsl;
-// #include colormaps/inferno.glsl;
-// #include colormaps/jet.glsl;
-// #include colormaps/magma.glsl;
-// #include colormaps/oxygen.glsl;
-// #include colormaps/par.glsl;
+
+#include colormaps/alpha.glsl;
+#include colormaps/autumn.glsl;
+#include colormaps/bathymetry.glsl;
+#include colormaps/blackbody.glsl;
+#include colormaps/bluered.glsl;
+#include colormaps/bone.glsl;
+#include colormaps/cdom.glsl;
+#include colormaps/chlorophyll.glsl;
+#include colormaps/cool.glsl;
+#include colormaps/copper.glsl;
+#include colormaps/cubehelix.glsl;
+#include colormaps/density.glsl;
+#include colormaps/earth.glsl;
+#include colormaps/electric.glsl;
+#include colormaps/freesurface-blue.glsl;
+#include colormaps/freesurface-red.glsl;
+#include colormaps/greens.glsl;
+#include colormaps/greys.glsl;
+#include colormaps/hot.glsl;
+#include colormaps/hsv.glsl;
+#include colormaps/inferno.glsl;
+#include colormaps/jet.glsl;
+#include colormaps/magma.glsl;
+#include colormaps/oxygen.glsl;
+#include colormaps/par.glsl;
 #include colormaps/phase.glsl;
-// #include colormaps/picnic.glsl;
-// #include colormaps/plasma.glsl;
-// #include colormaps/portland.glsl;
-// #include colormaps/rainbow-soft.glsl;
-// #include colormaps/rainbow.glsl;
-// #include colormaps/rdbu.glsl;
-// #include colormaps/salinity.glsl;
-// #include colormaps/spring.glsl;
-// #include colormaps/summer.glsl;
-// #include colormaps/temperature.glsl;
-// #include colormaps/turbidity.glsl;
-// #include colormaps/velocity-blue.glsl;
-// #include colormaps/velocity-green.glsl;
-// #include colormaps/viridis.glsl;
-// #include colormaps/warm.glsl;
-// #include colormaps/winter.glsl;
-// #include colormaps/yignbu.glsl;
-// #include colormaps/yiorrd.glsl;
+#include colormaps/picnic.glsl;
+#include colormaps/plasma.glsl;
+#include colormaps/portland.glsl;
+#include colormaps/rainbow-soft.glsl;
+#include colormaps/rainbow.glsl;
+#include colormaps/rdbu.glsl;
+#include colormaps/salinity.glsl;
+#include colormaps/spring.glsl;
+#include colormaps/summer.glsl;
+#include colormaps/temperature.glsl;
+#include colormaps/turbidity.glsl;
+#include colormaps/velocity-blue.glsl;
+#include colormaps/velocity-green.glsl;
+#include colormaps/viridis.glsl;
+#include colormaps/warm.glsl;
+#include colormaps/winter.glsl;
+#include colormaps/yignbu.glsl;
+#include colormaps/yiorrd.glsl;
 
 #define PI 3.1415926538
 
+
+
+uniform int         i_colormap;
 
 uniform vec2        u_resolution;          // viewport resolution (in pixels)
 uniform vec2        u_mouse;
 uniform float       u_time;                // shader playback time (in seconds)
 uniform float       u_delta;               // render time (in seconds)
+uniform bool        b_warp; 
+uniform bool        b_displace;
 
 uniform sampler2D   u_texture;
 uniform vec2        u_textureResolution;
@@ -208,13 +214,63 @@ float pattern( in vec2 p )
     return fbm( p + mouseWarp + fbm( p + mouseRotation + fbm( p + mouseWarp * 0.5 ) ) );
 }
 
+
+vec4 colormap(float x) {
+    if (i_colormap ==  0) return alpha(x);
+    else if (i_colormap ==  1) return autumn(x);
+    else if (i_colormap ==  2) return bathymetry(x);
+    else if (i_colormap ==  3) return blackbody(x);
+    else if (i_colormap ==  4) return bluered(x);
+    else if (i_colormap ==  5) return bone(x);
+    else if (i_colormap ==  6) return cdom(x);
+    else if (i_colormap ==  7) return chlorophyll(x);
+    else if (i_colormap ==  8) return cool(x);
+    else if (i_colormap ==  9) return copper(x);
+    else if (i_colormap == 10) return cubehelix(x);
+    else if (i_colormap == 11) return density(x);
+    else if (i_colormap == 12) return earth(x);
+    else if (i_colormap == 13) return electric(x);
+    else if (i_colormap == 14) return freesurface_blue(x);
+    else if (i_colormap == 15) return freesurface_red(x);
+    else if (i_colormap == 16) return greens(x);
+    else if (i_colormap == 17) return greys(x);
+    else if (i_colormap == 18) return hot(x);
+    else if (i_colormap == 19) return hsv(x);
+    else if (i_colormap == 20) return inferno(x);
+    else if (i_colormap == 21) return jet(x);
+    else if (i_colormap == 22) return magma(x);
+    else if (i_colormap == 23) return oxygen(x);
+    else if (i_colormap == 24) return par(x);
+    else if (i_colormap == 25) return phase(x);
+    else if (i_colormap == 26) return picnic(x);
+    else if (i_colormap == 27) return plasma(x);
+    else if (i_colormap == 28) return portland(x);
+    else if (i_colormap == 29) return rainbow_soft(x);
+    else if (i_colormap == 30) return rainbow(x);
+    else if (i_colormap == 31) return rdbu(x);
+    else if (i_colormap == 32) return salinity(x);
+    else if (i_colormap == 33) return spring(x);
+    else if (i_colormap == 34) return summer(x);
+    else if (i_colormap == 35) return temperature(x);
+    else if (i_colormap == 36) return turbidity(x);
+    else if (i_colormap == 37) return velocity_blue(x);
+    else if (i_colormap == 38) return velocity_green(x);
+    else if (i_colormap == 39) return viridis(x);
+    else if (i_colormap == 40) return warm(x);
+    else if (i_colormap == 41) return winter(x);
+    else if (i_colormap == 42) return yignbu(x);
+    else if (i_colormap == 43) return yiorrd(x);
+    else return vec4(0.0);          // fallback
+}
+
 void main()
 {
+
     vec2 uv = gl_FragCoord.xy/u_resolution.xy;
     float shade = pattern(uv);
 
     // vec3 color = smoothColormapTransition(shade, u_time).rgb;
-    vec3 color = phase(shade).rgb;
+    vec3 color = colormap(shade).rgb;
 
     // Center the logo and scale it down
     vec2 logoUV = (uv - 0.5) * 5.0 + 0.5; // Make logo smaller by stretching UV coordinates
@@ -263,15 +319,12 @@ void main()
     // NEW EFFECT: Bounded pixel blending (the new warping effect)
     vec4 logoSample = texture2D(u_texture, logoUV);
 
-
-    
-
     // Combine organic flow with gravity warping
     vec2 totalDisplacement = flowDisplacement + gravityDisplacement;
 
     // OLD EFFECT: Direct UV displacement - UNBOUNDED (can sample anywhere!)
     vec2 displacedLogoUV = logoUV + totalDisplacement;
-    vec4 directDisplacedSample = texture2D(u_texture, displacedLogoUV);
+    vec4 directDisplacedSample = b_displace ? texture2D(u_texture, displacedLogoUV) : logoSample;
 
     // Create a warping effect by sampling nearby pixels - ALSO UNBOUNDED
     vec2 offset1 = totalDisplacement * 0.5;
@@ -282,7 +335,7 @@ void main()
     vec4 warpSample2 = texture2D(u_texture, logoUV + offset2);
 
     // Blend the samples to create warping effect
-    vec4 warpedLogo = mix(mix(logoSample, warpSample1, 0.3), warpSample2, 0.2);
+    vec4 warpedLogo = b_warp ? mix(mix(logoSample, warpSample1, 0.3), warpSample2, 0.2) : logoSample;
 
     // COMBINE BOTH EFFECTS: Mix the direct displacement with the bounded blending
     float displacementMagnitude = length(totalDisplacement);
